@@ -75,6 +75,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageDecoders\Hl7Decoder.cs" />
+    <Compile Include="MessageDecoders\XMLDecoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

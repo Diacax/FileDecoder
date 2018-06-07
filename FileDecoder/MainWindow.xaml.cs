@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
+using System.Xml.Linq;
+using FileDecoder.MessageDecoders;
 using HL7.Dotnetcore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -27,6 +30,7 @@ namespace FileDecoder
         {
             InitializeComponent();
         }
+
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -34,40 +38,27 @@ namespace FileDecoder
 
         private void FileDataBox_TextChanged(object sender, RoutedEventArgs e)
         {
+            string dataStart = ""; 
+            if (FileDataBox.Text.Length > 2)
+                dataStart = FileDataBox.Text.Substring(0, 3);
+            
 
-            if (FileDataBox.Text.Substring(0, 3) == "MSH")
+            if (dataStart == "MSH")
             {
-                Message message = new Message(FileDataBox.Text.ToString());
-                message.ParseMessage();
-
-
-                List<Segment> segList = message.Segments();
-                for (int i = 0; i < segList.Count; i++)
-                {
-                    TreeViewItem segListView = new TreeViewItem();
-
-                    segListView.Header = segList[i].Name;
-                    var fieldList = segList[i].GetAllFields();
-                    for (int j = 0; j < fieldList.Count; j++)
-                    {
-                        var fieldItem = new TreeViewItem();
-                        Fields field = new Fields
-                        {
-                            FieldName = segList[i].Name + ":" + (j+1),
-                            FieldData = fieldList[j].Value
-                        };
-                        if (field.FieldData != "")
-                       segListView.Items.Add(segList[i].Name + ":" + (j+1) + "  --  " + fieldList[j].Value); 
-                    }
-                    Segs.Items.Add(segListView);
-                }
+                Segs.Items.Clear();
+                var decoder = new Hl7Decoder();
+                var segListView = decoder.Hl7TreeView(FileDataBox.Text);
+                Segs.Items.Add(segListView);
+            }
+            else if (dataStart.StartsWith("<"))
+            {
+              Segs.Items.Clear();
+              var decoder = new XMLDecoder();
+              var xmlSegs = decoder.XmlTreeView(FileDataBox.Text); 
+              Segs.Items.Add(xmlSegs);
+                
+                //Do nothing at the moment. 
             }
         }
     }
-    public class Fields {
-        public string FieldName { get; set; }
-        public string FieldData { get; set; }
-
-    }
-    
 }

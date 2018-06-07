@@ -34,7 +34,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="8*"/>
                 <RowDefinition Height="4*"/>
-                <RowDefinition Height="*"/>
 
             </Grid.RowDefinitions>
             <TextBox Margin="5,10,5,0" Name="FileDataBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Please enter text here or by using the above keys." TextWrapping="Wrap" AcceptsReturn="True"
@@ -43,7 +42,6 @@
                 <TreeView Name="Segs"></TreeView>
             </DockPanel>
             <TextBox Margin="5,5,5,10" Grid.Row="1" Grid.Column="2" IsReadOnly="True"/>
-            <Button Name="SubmitMessage" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" Margin="5,0,10,0" Content="Submit Parsed Message Button *Placeholder*" Click="FileDataBox_TextChanged"/>
         </Grid>
     </DockPanel>
 
